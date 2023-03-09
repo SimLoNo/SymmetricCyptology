@@ -14,18 +14,18 @@ namespace SymmetricCyptology
 			using (var aes = new AesCryptoServiceProvider())
 			{
 
-				aes.Mode = CipherMode.ECB;
-				aes.Padding = PaddingMode.PKCS7;
+				aes.Mode = CipherMode.ECB; // Sets the method to encrypt the individual parts of the message.
+				aes.Padding = PaddingMode.PKCS7; // Sets the method used to fill blank spots in the text.
 
 				aes.Key = key;
 				aes.IV = iv;
 
 				using (var memoryStream = new MemoryStream())
 				{
-					var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write);
+					var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write); // Sets up a cryptoStream to encrypt the message.
 
-					cryptoStream.Write(message, 0, message.Length);
-					cryptoStream.FlushFinalBlock();
+					cryptoStream.Write(message, 0, message.Length); // Encrypts the message
+					cryptoStream.FlushFinalBlock(); // flashes the part of the blocks that contains the block keys from RAM.
 
 					return memoryStream.ToArray();
 
@@ -42,18 +42,18 @@ namespace SymmetricCyptology
 			using (var aes = new AesCryptoServiceProvider())
 			{
 
-				aes.Mode = CipherMode.ECB;
-				aes.Padding = PaddingMode.PKCS7;
+				aes.Mode = CipherMode.ECB; // Sets the method to encrypt the individual parts of the message.
+				aes.Padding = PaddingMode.PKCS7; // Sets the method used to fill blank spots in the text.
 
 				aes.Key = key;
 				aes.IV = iv;
 
 				using (var memoryStream = new MemoryStream())
 				{
-					var cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Write);
+					var cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Write); // Sets up a cryptoStream to decrypt the message.
 
-					cryptoStream.Write(message, 0, message.Length);
-					cryptoStream.FlushFinalBlock();
+					cryptoStream.Write(message, 0, message.Length); // Decrypts the message
+					cryptoStream.FlushFinalBlock(); // flashes the part of the blocks that contains the block keys from RAM.
 
 					return memoryStream.ToArray();
 
