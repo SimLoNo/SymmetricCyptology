@@ -12,8 +12,8 @@ do
 	Console.WriteLine("1: DES");
 	Console.WriteLine("2: 3DES");
 	Console.WriteLine("3: AES");
-	ConsoleKeyInfo key = Console.ReadKey();
-	switch (key.Key)
+	ConsoleKeyInfo SelectedOption= Console.ReadKey();
+	switch (SelectedOption.Key)
 	{
 		case ConsoleKey.D1:
 			selectedEncryption = "DES";
@@ -32,39 +32,61 @@ do
 } while (selectedEncryption is null);
 Console.Clear();
 NumberGenerator rngGenerator = new NumberGenerator();
+IEncryptor encryptor = null;
+byte[] key = null;
+byte[] iv = null;
 if (selectedEncryption == "DES")
 {
-	var key = rngGenerator.GenerateRandomNumber(8);
-	var iv = rngGenerator.GenerateRandomNumber(8);
-	DesEncrypter encrypter = new DesEncrypter();
-    Console.WriteLine($"Oprindelig besked: {original}");
-    var encryptedMessage = encrypter.Encrypt(Encoding.UTF8.GetBytes(original), key, iv);
-    Console.WriteLine($"Kryptered besked: {Convert.ToBase64String(encryptedMessage)}");
-    var decryptedMessage = encrypter.Decrypt(encryptedMessage, key, iv);
-    Console.WriteLine($"Dekryptered besked: {Encoding.UTF8.GetString(decryptedMessage)}");
+	key = rngGenerator.GenerateRandomNumber(8);
+	iv = rngGenerator.GenerateRandomNumber(8);
+	encryptor = new DesEncrypter();
 
 }
 if (selectedEncryption == "3DES")
 {
-	var key = rngGenerator.GenerateRandomNumber(16);
-	var iv = rngGenerator.GenerateRandomNumber(8);
-	TrippleDes encrypter = new TrippleDes();
-	Console.WriteLine($"Oprindelig besked: {original}");
-	var encryptedMessage = encrypter.Encrypt(Encoding.UTF8.GetBytes(original), key, iv);
-	Console.WriteLine($"Kryptered besked: {Convert.ToBase64String(encryptedMessage)}");
-	var decryptedMessage = encrypter.Decrypt(encryptedMessage, key, iv);
-	Console.WriteLine($"Dekryptered besked: {Encoding.UTF8.GetString(decryptedMessage)}");
+	key = rngGenerator.GenerateRandomNumber(16);
+	iv = rngGenerator.GenerateRandomNumber(8);
+	encryptor = new TrippleDes();
 
 }
 if (selectedEncryption == "AES")
 {
-	var key = rngGenerator.GenerateRandomNumber(32);
-	var iv = rngGenerator.GenerateRandomNumber(16);
-	AesEncrypter encrypter = new AesEncrypter();
-	Console.WriteLine($"Oprindelig besked: {original}");
-	var encryptedMessage = encrypter.Encrypt(Encoding.UTF8.GetBytes(original), key, iv);
-	Console.WriteLine($"Kryptered besked: {Convert.ToBase64String(encryptedMessage)}");
-	var decryptedMessage = encrypter.Decrypt(encryptedMessage, key, iv);
-	Console.WriteLine($"Dekryptered besked: {Encoding.UTF8.GetString(decryptedMessage)}");
+	key = rngGenerator.GenerateRandomNumber(32);
+	iv = rngGenerator.GenerateRandomNumber(16);
+	encryptor = new AesEncrypter();
 
+}
+
+
+
+Console.WriteLine($"Oprindelig besked: {original}");
+var encryptedMessage = encryptor.Encrypt(Encoding.UTF8.GetBytes(original), key, iv);
+Console.WriteLine($"Kryptered besked: {Convert.ToBase64String(encryptedMessage)}");
+
+bool DecryptionAnswered = false;
+string decryptedMessage = "";
+do
+{
+	Console.WriteLine("Vil du dekryptere beskeden? \n 1: Ja \n 2: Nej");
+	ConsoleKeyInfo keyInfo = Console.ReadKey();
+	Console.WriteLine();
+	switch (keyInfo.Key)
+	{
+		case ConsoleKey.D1:
+			DecryptionAnswered = true;
+			var decryptedBytes = encryptor.Decrypt(encryptedMessage, key, iv);
+			decryptedMessage = Encoding.UTF8.GetString(decryptedBytes);
+			break;
+		case ConsoleKey.D2:
+			DecryptionAnswered = true;
+			break;
+		default:
+			break;
+	}
+
+} while (DecryptionAnswered == false);
+
+if (decryptedMessage != "")
+{
+	Console.WriteLine($"Dekryptered besked: {decryptedMessage}");
 }

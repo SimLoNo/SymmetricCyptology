@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SymmetricCyptology
 {
-	public class TrippleDes
+	public class TrippleDes : IEncryptor
 	{
 		public byte[] Encrypt(byte[] message, byte[] key, byte[] iv)
 		{

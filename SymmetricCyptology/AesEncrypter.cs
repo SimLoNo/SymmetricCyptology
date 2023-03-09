@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SymmetricCyptology
 {
-	public class AesEncrypter
+	public class AesEncrypter : IEncryptor
 	{
 		public byte[] Encrypt(byte[] message, byte[] key, byte[] iv)
 		{

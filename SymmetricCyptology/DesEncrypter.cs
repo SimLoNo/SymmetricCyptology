@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace SymmetricCyptology
 {
-	public class DesEncrypter
+	public class DesEncrypter : IEncryptor
 	{
 		public byte[] Encrypt(byte[] message, byte[] key, byte[] iv)
 		{
